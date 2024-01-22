@@ -1,0 +1,74 @@
+1 )
+SELECT 
+    gen."Name" AS GenreName,
+    SUM(invl."UnitPrice") AS TotalSales
+FROM 
+    Genre AS gen
+JOIN 
+    Track AS trk ON gen."GenreId" = trk."GenreId"
+JOIN 
+    InvoiceLine AS invl ON trk."TrackId" = invl."TrackId"
+GROUP BY 
+    gen."Name"
+ORDER BY 
+    TotalSales DESC
+LIMIT 3;
+
+
+
+2)
+
+SELECT
+    emp."FirstName",
+    emp."LastName",
+    SUM(invl."UnitPrice") AS TotalSales
+FROM
+    Employee AS emp
+LEFT JOIN
+    Customer AS cst ON emp."EmployeeId" = cst."SupportRepId"
+LEFT JOIN
+    Invoice AS inv ON cst."CustomerId" = inv."CustomerId"
+LEFT JOIN
+    InvoiceLine AS invl ON inv."InvoiceId" = invl."InvoiceId"
+GROUP BY
+    emp."EmployeeId", emp."FirstName", emp."LastName"
+ORDER BY
+    TotalSales DESC;
+
+
+3)
+
+
+SELECT
+    pl."Name" AS PlaylistName,
+    COUNT(pltrk."TrackId") AS NumberOfTracks
+FROM
+    Playlist AS pl
+JOIN
+    PlaylistTrack AS pltrk ON pl."PlaylistId" = pltrk."PlaylistId"
+GROUP BY
+    pl."PlaylistId", pl."Name"
+ORDER BY
+    NumberOfTracks DESC
+LIMIT 5;
+
+-- After the selection we get duplicated result (1-2, 4-5 rows). Actually it is caused by the given data in these tables
+
+
+
+4)
+
+SELECT
+    cst."FirstName",
+    cst."LastName",
+    COUNT(DISTINCT inv."InvoiceId") AS TotalPurchases
+FROM
+    Customer AS cst
+LEFT JOIN
+    Invoice AS inv ON cst."CustomerId" = inv."CustomerId"
+GROUP BY
+    cst."CustomerId", cst."FirstName", cst."LastName"
+ORDER BY
+    TotalPurchases DESC;
+	
+	
